@@ -1,5 +1,4 @@
 import DashboardCard from '@/components/dashboard/DashboardCard';
-import PostsTable from '@/components/posts/PostsTable';
 import AnalyticsChart from '@/components/dashboard/AnalyticsChart';
 import { Folder, MessageCircle, Newspaper, User } from 'lucide-react';
 
@@ -8,7 +7,7 @@ export default function Home() {
     <>
       <div className='flex flex-col md:flex-row justify-between gap-5 mb-5'>
         <DashboardCard
-          title='Posts'
+          title='Phiếu hẹn'
           count={100}
           icon={<Newspaper className='text-slate-500' size={72} />}
         />
@@ -18,7 +17,7 @@ export default function Home() {
           icon={<Folder className='text-slate-500' size={72} />}
         />
         <DashboardCard
-          title='Users'
+          title='Khách Hàng'
           count={750}
           icon={<User className='text-slate-500' size={72} />}
         />
@@ -29,7 +28,6 @@ export default function Home() {
         />
       </div>
       <AnalyticsChart />
-      <PostsTable title='Latest Posts' limit={5} />
     </>
   );
 }

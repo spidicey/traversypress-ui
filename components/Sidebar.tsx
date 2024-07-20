@@ -8,7 +8,7 @@ import {
   CommandList,
   CommandSeparator,
   CommandShortcut,
-} from '@/components/ui/command';
+} from "@/components/ui/command";
 import {
   LayoutDashboard,
   Newspaper,
@@ -16,43 +16,67 @@ import {
   CreditCard,
   Settings,
   User,
-} from 'lucide-react';
-import Link from 'next/link';
+} from "lucide-react";
+import Link from "next/link";
 
 const Sidebar = () => {
   return (
-    <Command className='bg-secondary rounded-none'>
-      <CommandInput placeholder='Type a command or search...' />
+    <Command className="bg-secondary rounded-none ">
+      <CommandInput placeholder="Type a command or search..." />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
-        <CommandGroup heading='Suggestions'>
+        <CommandGroup heading="Quản lý nhân viên">
           <CommandItem>
-            <LayoutDashboard className='mr-2 h-4 w-4' />
-            <Link href='/'>Dashboard</Link>
+            <User className="mr-2 h-4 w-4" />
+            <Link href="/nhanvien">Nhân viên</Link>
           </CommandItem>
           <CommandItem>
-            <Newspaper className='mr-2 h-4 w-4' />
-            <Link href='/posts'>Posts</Link>
-          </CommandItem>
-          <CommandItem>
-            <Folders className='mr-2 h-4 w-4' />
-            <Link href='#'>Categories</Link>
+            <User className="mr-2 h-4 w-4" />
+            <Link href="/khachhang">Khách hàng</Link>
           </CommandItem>
         </CommandGroup>
         <CommandSeparator />
-        <CommandGroup heading='Settings'>
+        <CommandGroup heading="Suggestions">
           <CommandItem>
-            <User className='mr-2 h-4 w-4' />
+            <LayoutDashboard className="mr-2 h-4 w-4" />
+            <Link href="/">Dashboard</Link>
+          </CommandItem>
+          <CommandItem>
+            <Newspaper className="mr-2 h-4 w-4" />
+            <Link href="/phieuhen">Phiếu Hẹn</Link>
+          </CommandItem>
+          <CommandItem>
+            <Newspaper className="mr-2 h-4 w-4" />
+            <Link href="/phieunhap">Phiếu Nhập</Link>
+          </CommandItem>
+          <CommandItem>
+            <Newspaper className="mr-2 h-4 w-4" />
+            <Link href="/phieuxuat">Phiếu Xuất</Link>
+          </CommandItem>
+          <CommandItem></CommandItem>
+          <CommandItem>
+            <Folders className="mr-2 h-4 w-4" />
+            <Link href="/linhkien">Linh kiện</Link>
+          </CommandItem>
+          <CommandItem>
+            <Folders className="mr-2 h-4 w-4" />
+            <Link href="/kho">Kho</Link>
+          </CommandItem>
+        </CommandGroup>
+        <CommandSeparator />
+        <CommandGroup heading="Settings">
+          <CommandItem>
+            <User className="mr-2 h-4 w-4" />
             <span>Profile</span>
             <CommandShortcut>⌘P</CommandShortcut>
           </CommandItem>
           <CommandItem>
-            <CreditCard className='mr-2 h-4 w-4' />
+            <CreditCard className="mr-2 h-4 w-4" />
             <span>Billing</span>
             <CommandShortcut>⌘B</CommandShortcut>
           </CommandItem>
           <CommandItem>
-            <Settings className='mr-2 h-4 w-4' />
+            <Settings className="mr-2 h-4 w-4" />
             <span>Settings</span>
             <CommandShortcut>⌘S</CommandShortcut>
           </CommandItem>
