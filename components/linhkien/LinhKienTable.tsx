@@ -6,6 +6,7 @@ import useSWR from "swr";
 import { columns } from "./columns";
 import { DataTable } from "../data-table/data-table";
 import { DataTableFilterField } from "@/types";
+import { AddLinhKien } from "./addLinhKien";
 
 interface PostsTableProps {
   title?: string;
@@ -21,7 +22,7 @@ const LinhKienTable = ({ title }: PostsTableProps) => {
   return (
     <div className="mt-10">
       <h3 className="text-2xl mb-4 font-semibold">{title ? title : "Posts"}</h3>
-      <AddPhieuNhap />
+      <AddLinhKien />
       <DataTable
         columns={columns}
         data={data?.data ?? []}

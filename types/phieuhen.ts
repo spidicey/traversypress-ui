@@ -1,5 +1,5 @@
 type PhieuHen = {
-  idPhieuHen?: number;
+  idPhieuHen: number;
   ngayHen: Date;
   khachHang: KhachHang;
   nhanVien: NhanVien;

@@ -14,25 +14,31 @@ import useSWR from "swr";
 import { columns } from "./columns";
 import { DataTable } from "../data-table/data-table";
 import { DataTableFilterField } from "@/types";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 interface PostsTableProps {
   title?: string;
 }
-interface PhieuHenProps {
-  idPhieuHen: number;
-  ngayHen: string;
-  trangThai: string;
-  khachHang: {
-    tenKhachHang: string;
-  };
-  nhanVien: {
-    hoTen: string;
-  };
-  category: {
-    loai: string;
-  };
-}
 const PhieuHenTable = ({ title }: PostsTableProps) => {
+  const token = Cookies.get("token");
+  const decodedToken = jwtDecode(token || "");
+  // @ts-ignore
+  const username = decodedToken?.username;
+  // @ts-ignore
+
+  const role = decodedToken.role;
+
+  const { data: NhanvienData } = useSWR<ResponseData<NhanVien>>(
+    `http://localhost:8080/api/auth/nhanvien/username/${username}`,
+    fetcher
+  );
+  let urlPhieuHen = "";
+  if (role === "nhân viên") {
+    urlPhieuHen = `http://localhost:8080/api/phieuhen/nhanvien/${NhanvienData?.data.idNhanVien}`;
+  } else {
+    urlPhieuHen = `http://localhost:8080/api/phieuhen`;
+  }
   const filterFields: DataTableFilterField<PhieuHen>[] = [
     {
       label: "Nhân viên",
@@ -59,21 +65,22 @@ const PhieuHenTable = ({ title }: PostsTableProps) => {
           value: "Hoàn thành",
         },
         {
-          label: "Đang chờ",
+          label: "Đang huỷ",
           value: "Đã hủy",
         },
       ],
     },
   ];
+  console.log(urlPhieuHen);
   const { data, isLoading, error } = useSWR<ResponseData<PhieuHen[]>>(
-    `http://localhost:8080/api/phieuhen`,
+    urlPhieuHen,
     fetcher
   );
   if (isLoading) return <div>Loading...</div>;
+  console.log(data?.data);
   return (
     <div className="mt-10">
       <h3 className="text-2xl mb-4 font-semibold">{title ? title : "Posts"}</h3>
-      <AddPhieuNhap />
       <DataTable
         columns={columns}
         data={data?.data ?? []}

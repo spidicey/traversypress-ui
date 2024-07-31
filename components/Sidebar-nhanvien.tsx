@@ -19,23 +19,12 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-const Sidebar = () => {
+const SidebarNhanvien = () => {
   return (
     <Command className="bg-secondary rounded-none ">
       <CommandInput placeholder="Type a command or search..." />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
-        <CommandGroup heading="Quản lý nhân viên">
-          <CommandItem>
-            <User className="mr-2 h-4 w-4" />
-            <Link href="/nhanvien">Nhân viên</Link>
-          </CommandItem>
-          <CommandItem>
-            <User className="mr-2 h-4 w-4" />
-            <Link href="/khachhang">Khách hàng</Link>
-          </CommandItem>
-        </CommandGroup>
-        <CommandSeparator />
         <CommandGroup heading="Suggestions">
           <CommandItem>
             <LayoutDashboard className="mr-2 h-4 w-4" />
@@ -71,7 +60,7 @@ const Sidebar = () => {
         <CommandGroup heading="Settings">
           <CommandItem>
             <User className="mr-2 h-4 w-4" />
-            <Link href="/profile">Profile</Link>
+            <span>Profile</span>
             <CommandShortcut>⌘P</CommandShortcut>
           </CommandItem>
           <CommandItem>
@@ -90,4 +79,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default SidebarNhanvien;
