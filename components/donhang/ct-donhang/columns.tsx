@@ -5,11 +5,11 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
-export const columns: ColumnDef<CTPhieuSua>[] = [
+export const columns: ColumnDef<CtDonHang>[] = [
   {
-    accessorKey: "idPhieuSua",
+    accessorKey: "idDonHang",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="ID Phiếu Sửa" />
+      <DataTableColumnHeader column={column} title="ID Đơn hàng" />
     ),
   },
   // {
@@ -27,22 +27,21 @@ export const columns: ColumnDef<CTPhieuSua>[] = [
   //   // cell: (info) => (info.getValue() as CTPhieuSua)?.linhKien.nhanHieu,
   // },
   {
-    accessorKey: "phieuXuat.ngayCap",
+    accessorKey: "idSanPham",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Ngày cấp" />
+      <DataTableColumnHeader column={column} title="id Sản phẩm" />
     ),
   },
   {
-    accessorKey: "linhKien",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Phụ kiện" />
-    ),
-    cell: (info) => (info.getValue() as LinhKien)?.tenSanPham,
-  },
-  {
-    accessorKey: "phieuXuat.soLuong",
+    accessorKey: "soLuong",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Số lượng" />
+    ),
+  },
+  {
+    accessorKey: "gia",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="giá" />
     ),
   },
 ];

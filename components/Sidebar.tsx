@@ -57,6 +57,10 @@ const Sidebar = () => {
             <Newspaper className="mr-2 h-4 w-4" />
             <Link href="/phieuxuat">Phiếu Xuất</Link>
           </CommandItem>
+          <CommandItem>
+            <Newspaper className="mr-2 h-4 w-4" />
+            <Link href="/donhang">Đơn hàng</Link>
+          </CommandItem>
           <CommandItem></CommandItem>
           <CommandItem>
             <Folders className="mr-2 h-4 w-4" />

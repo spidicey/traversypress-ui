@@ -50,6 +50,11 @@ export const columns: ColumnDef<NhanVien>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Tài Khoản" />
     ),
+    filterFn: (row, columnId, value) => {
+      const nhanVien = row.getValue(columnId) as Account;
+      console.log(nhanVien?.tk?.toLowerCase().includes(value.toLowerCase()));
+      return nhanVien?.tk?.toLowerCase().includes(value.toLowerCase());
+    },
     cell: (info) => {
       const account: Account = info.getValue() as Account;
       return (

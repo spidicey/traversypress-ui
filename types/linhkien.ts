@@ -4,4 +4,5 @@ type LinhKien = {
   nhanHieu: string;
   gia: number;
   thoiGianBaoHanh: number;
+  danhSachAnh: Anh[];
 };

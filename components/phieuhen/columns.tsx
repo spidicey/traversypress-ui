@@ -32,10 +32,13 @@ export const columns: ColumnDef<PhieuHen>[] = [
     accessorKey: "khachHang",
     header: "Khách hàng",
     cell: (info) => (info.getValue() as KhachHang)?.tenKhachHang,
-    filterFn: (row, columnIds, filterValue) =>
-      (row.getValue(columnIds) as KhachHang)?.tenKhachHang
-        .toLowerCase()
-        .includes(filterValue.toLowerCase()),
+    filterFn: (row, columnId, value) => {
+      const khachHang = row.getValue(columnId) as KhachHang;
+      console.log(
+        khachHang?.tenKhachHang?.toLowerCase().includes(value.toLowerCase())
+      );  
+      return khachHang?.tenKhachHang?.toLowerCase().includes(value.toLowerCase());
+    },
   },
   {
     accessorKey: "nhanVien",
@@ -43,10 +46,11 @@ export const columns: ColumnDef<PhieuHen>[] = [
       <DataTableColumnHeader column={column} title="Nhân viên" />
     ),
     cell: (info) => (info.getValue() as NhanVien)?.hoTen,
-    filterFn: (row, columnIds, filterValue) =>
-      (row.getValue(columnIds) as NhanVien)?.hoTen
-        .toLowerCase()
-        .includes(filterValue.toLowerCase()),
+    filterFn: (row, columnId, value) => {
+      const nhanVien = row.getValue(columnId) as NhanVien;
+      console.log(nhanVien?.hoTen?.toLowerCase().includes(value.toLowerCase()));
+      return nhanVien?.hoTen?.toLowerCase().includes(value.toLowerCase());
+    },
   },
   {
     accessorKey: "trangThai",

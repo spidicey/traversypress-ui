@@ -1,6 +1,8 @@
 import DashboardCard from '@/components/dashboard/DashboardCard';
 import AnalyticsChart from '@/components/dashboard/AnalyticsChart';
 import { Folder, MessageCircle, Newspaper, User } from 'lucide-react';
+import CustomChart from '@/components/dashboard/Chart';
+import AppointmentChart from '@/components/dashboard/Chart2';
 
 export default function Home() {
   return (
@@ -28,7 +30,9 @@ export default function Home() {
           icon={<MessageCircle className='text-slate-500' size={72} />}
         /> */}
       </div>
-      <AnalyticsChart />
+      {/* <AnalyticsChart /> */}
+      <CustomChart />
+      <AppointmentChart />
     </>
   );
 }

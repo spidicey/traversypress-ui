@@ -1,7 +1,7 @@
 import BackButton from "@/components/BackButton";
+import CTDonHangaTable from "@/components/donhang/ct-donhang/CTDonHangTable";
 import CTPhieuSuaTable from "@/components/phieusua/ct-phieusua/CTPhieuSuaTable";
 import React from "react";
-
 
 export default function page({
   params,
@@ -13,7 +13,7 @@ export default function page({
   return (
     <>
       <BackButton text="Go Back" link="/" />
-      <CTPhieuSuaTable id={params.id} title="Chi tiết phiếu Sửa" />
+      <CTDonHangaTable id={params.id} title="Chi tiết phiếu Sửa" />
     </>
   );
 }

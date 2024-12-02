@@ -1,3 +1,4 @@
+"use client";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { AccountForm } from "./account-form";
 
@@ -14,5 +15,5 @@ export default function SettingsAccountPage() {
       <Separator />
       <AccountForm />
     </div>
-  )
+  );
 }

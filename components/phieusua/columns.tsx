@@ -25,6 +25,15 @@ export const columns: ColumnDef<PhieuSua>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Khách Hàng" />
     ),
+    filterFn: (row, columnId, value) => {
+      const khachHang = row.getValue(columnId) as KhachHang;
+      console.log(
+        khachHang?.tenKhachHang?.toLowerCase().includes(value.toLowerCase())
+      );
+      return khachHang?.tenKhachHang
+        ?.toLowerCase()
+        .includes(value.toLowerCase());
+    },
     cell: (info) => (info.getValue() as KhachHang)?.tenKhachHang,
   },
   {

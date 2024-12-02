@@ -21,7 +21,7 @@ const Navbar = () => {
   // console.log(token);
   const router = useRouter();
   if (!token) {
-    router.push('/login');
+    router.push("/login");
   }
   const handleLogout = () => {
     Cookies.remove("token");

@@ -5,17 +5,28 @@ import SidebarNhanvien from "@/components/Sidebar-nhanvien";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const token = Cookies.get("token");
-  console.log(token);
   const router = useRouter();
+
+  // Check if the token is available, if not, redirect to login page
+  useEffect(() => {
+    if (!token) {
+      router.push("/login");
+    }
+  }, [token, router]);
+
+  // Only proceed with decoding the token and rendering the layout if the token exists
   if (!token) {
-    router.push("/login");
+    return null; // Avoid rendering layout while redirecting
   }
+
   const decodedToken = jwtDecode(token || "");
   // @ts-ignore
   const role = decodedToken.role;
+
   return (
     <>
       <Navbar />

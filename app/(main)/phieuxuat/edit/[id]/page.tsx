@@ -17,6 +17,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import posts from '@/data/posts';
 import { useToast } from '@/components/ui/use-toast';
+import React from 'react';
 
 const formSchema = z.object({
   title: z.string().min(1, {

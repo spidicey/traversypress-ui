@@ -47,14 +47,14 @@ export function AddPhieuSua() {
     data: linhKienData,
     isLoading,
     error,
-  } = useSWR<ResponseData<LinhKien[]>>(
-    `http://localhost:8080/api/kho/linhkien`,
+  } = useSWR<ResponseData<PhieuXuat[]>>(
+    `http://localhost:8080/api/kho/phieuxuat`,
     fetcher
   );
   const OPTIONS: Option[] =
-    linhKienData?.data.map((item: LinhKien) => ({
-      label: item.tenSanPham,
-      value: item.idSanPham.toString(),
+    linhKienData?.data.map((item: PhieuXuat) => ({
+      label: item.linhKien.tenSanPham,
+      value: item.linhKien.idSanPham.toString(),
     })) || [];
 
   const onSubmit = async (formData: PhieuSua) => {
@@ -74,6 +74,7 @@ export function AddPhieuSua() {
       ngayTao: new Date(),
       idNhanVien: formData.nhanVien.idNhanVien,
       idLinhKiens: idArray,
+      idPhieuXuats: idArray,
     };
     console.log(createData);
     const response = await fetch(`http://localhost:8080/api/phieusua`, {
