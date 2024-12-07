@@ -20,19 +20,30 @@ export const columns: ColumnDef<Kho>[] = [
       <DataTableColumnHeader column={column} title="Tên Linh Kiện" />
     ),
     cell: (info) => (info.getValue() as LinhKien)?.tenSanPham,
+    filterFn: (row, columnIds, filterValue) =>
+      (row.getValue(columnIds) as LinhKien)?.tenSanPham
+        .toLowerCase()
+        .includes(filterValue.toLowerCase()),
+
   },
   {
-    accessorKey: "linhKien",
+    id:"nhãn hiệu",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Nhãn Hiệu" />
     ),
     cell: (info) => (info.getValue() as LinhKien)?.nhanHieu,
+    filterFn: (row, columnIds, filterValue) =>
+      (row.getValue(columnIds) as LinhKien)?.nhanHieu
+        .toLowerCase()
+        .includes(filterValue.toLowerCase()),
   },
   {
     accessorKey: "soLuong",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Tên Linh Kiện" />
+      <DataTableColumnHeader column={column} title="Số lượng" />
     ),
+        filterFn: "includesString",
+
   },
 
   {
@@ -57,10 +68,10 @@ export const columns: ColumnDef<Kho>[] = [
             >
               Copy ID
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            {/* <DropdownMenuSeparator />
             <DropdownMenuItem>View details</DropdownMenuItem>
             <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+            <DropdownMenuItem>Delete</DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
       );

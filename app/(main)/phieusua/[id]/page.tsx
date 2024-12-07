@@ -13,7 +13,7 @@ export default function page({
   return (
     <>
       <BackButton text="Go Back" link="/" />
-      <CTPhieuSuaTable id={params.id} title="Chi tiết phiếu Sửa" />
+      <CTPhieuSuaTable id={params.id} title="Chi tiết đơn hàng" />
     </>
   );
 }

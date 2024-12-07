@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import {
+  LineChart,
+  Line,
   BarChart,
   Bar,
   CartesianGrid,
@@ -12,98 +14,105 @@ import {
 } from "recharts";
 import { Button } from "@/components/ui/button";
 import { DateRange } from "react-day-picker";
-import { addDays, format } from "date-fns";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format, parseISO, isWithinInterval } from "date-fns";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import useSWR from "swr";
 import { fetcher } from "../utils/fetcher";
 
-const data = [
-  {
-    idPhieuHen: 1,
-    ngayHen: "2024-07-15",
-    trangThai: "Đã huỷ",
-  },
-  {
-    idPhieuHen: 2,
-    ngayHen: "2024-07-16",
-    trangThai: "Đang xử lý",
-  },
-  {
-    idPhieuHen: 3,
-    ngayHen: "2024-07-17",
-    trangThai: "Đã huỷ",
-  },
-];
+// Define types for the API response
+interface KhachHang {
+  idKhachHang: number;
+  tenKhachHang: string;
+  diaChi: string;
+  dienThoai: string;
+  maSoThue: string;
+}
+
+interface PhieuHen {
+  idPhieuHen: number;
+  ngayHen: string;
+  trangThai: string;
+  khachHang: KhachHang;
+}
 
 export default function AppointmentChart() {
-    const { data, isLoading, error } = useSWR<ResponseData<PhieuHen[]>>(
-        `http://localhost:8080/api/phieuhen`,
-        fetcher
-      );
-  const [date, setDate] = useState<DateRange | undefined>({
-    from: new Date(2024, 6, 15),
-    to: new Date(2024, 6, 17),
-  });
-if (isLoading) return <div>Loading...</div>;
+  const { data, isLoading, error } = useSWR<ResponseData<PhieuHen[]>>(
+    `http://localhost:8080/api/phieuhen`,
+    fetcher
+  );
+
+  const [chartType, setChartType] = useState<"line" | "bar">("bar");
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+
+  if (isLoading) return <div>Loading...</div>;
   if (error || !data || data.status !== 200)
     return <div>Error loading data</div>;
-  const processData = (data: PhieuHen[], range: DateRange | undefined) => {
-    // Filter data based on the selected date range
-    const filteredData = data.filter((item) => {
-      const itemDate = new Date(item.ngayHen);
-      if (range?.from && range?.to) {
-        return itemDate >= range.from && itemDate <= range.to;
-      }
-      return true;
-    });
 
-    // Count occurrences of each status
-    const statusCount = filteredData.reduce((acc: any, curr: any) => {
-      acc[curr.trangThai] = (acc[curr.trangThai] || 0) + 1;
+  const processDataForChart = (appointments: PhieuHen[], range: DateRange | undefined) => {
+    const groupedData = appointments.reduce((acc: Record<string, number>, appointment: PhieuHen) => {
+      const appointmentDate = parseISO(appointment.ngayHen);
+      const formattedDate = format(appointmentDate, "yyyy-MM-dd");
+      console.log(formattedDate)
+      if (
+        range?.from &&
+        range?.to &&
+        isWithinInterval(appointmentDate, { start: range.from, end: range.to })
+      ) {
+        acc[formattedDate] = (acc[formattedDate] || 0) + 1; // Counting occurrences by date
+      }
       return acc;
     }, {});
-
-    // Format data for the chart
-    return Object.entries(statusCount).map(([status, count]) => ({
-      status,
+  
+    return Object.entries(groupedData).map(([date, count]) => ({
+      date,
       count,
     }));
   };
 
-  const chartData = processData(data?.data, date);
-
+  const chartData = processDataForChart(data.data, dateRange);
+  console.log(chartData)
   return (
     <div className="space-y-6">
       <Card>
-      <CardHeader>
+        <CardHeader>
           <CardTitle>Biểu đồ lịch hẹn</CardTitle>
-          <CardDescription>Xem lịch hẹn qua dòng thời gian</CardDescription>
+          <CardDescription>Xem lịch hẹn theo thời gian</CardDescription>
         </CardHeader>
-        <div className="flex items-center gap-4 p-4">
+
+        <div className="flex items-center justify-between gap-4 p-4">
           {/* Date Picker */}
           <Popover>
             <PopoverTrigger asChild>
               <Button
                 id="date"
-                variant={"outline"}
+                variant="outline"
                 className={cn(
                   "w-[300px] justify-start text-left font-normal",
-                  !date && "text-muted-foreground"
+                  !dateRange && "text-muted-foreground"
                 )}
               >
-                <CalendarIcon />
-                {date?.from ? (
-                  date.to ? (
+                <CalendarIcon className="mr-2" />
+                {dateRange?.from ? (
+                  dateRange.to ? (
                     <>
-                      {format(date.from, "LLL dd, y")} -{" "}
-                      {format(date.to, "LLL dd, y")}
+                      {format(dateRange.from, "LLL dd, yyyy")} -{" "}
+                      {format(dateRange.to, "LLL dd, yyyy")}
                     </>
                   ) : (
-                    format(date.from, "LLL dd, y")
+                    format(dateRange.from, "LLL dd, yyyy")
                   )
                 ) : (
                   <span>Pick a date</span>
@@ -114,25 +123,50 @@ if (isLoading) return <div>Loading...</div>;
               <Calendar
                 initialFocus
                 mode="range"
-                defaultMonth={date?.from}
-                selected={date}
-                onSelect={setDate}
+                selected={dateRange}
+                onSelect={setDateRange}
                 numberOfMonths={2}
               />
             </PopoverContent>
           </Popover>
+
+          {/* Chart Type Toggle */}
+          <div className="flex gap-2">
+            <Button
+              variant={chartType === "line" ? "default" : "outline"}
+              onClick={() => setChartType("line")}
+            >
+              Line Chart
+            </Button>
+            <Button
+              variant={chartType === "bar" ? "default" : "outline"}
+              onClick={() => setChartType("bar")}
+            >
+              Bar Chart
+            </Button>
+          </div>
         </div>
 
-        {/* Bar Chart */}
+        {/* Chart */}
         <div className="w-full h-64">
           <ResponsiveContainer>
-            <BarChart data={chartData}>
-              <Bar dataKey="count" fill="#8884d8" />
-              <CartesianGrid stroke="#ccc" />
-              <XAxis dataKey="status" />
-              <YAxis />
-              <Tooltip />
-            </BarChart>
+            {chartType === "line" ? (
+              <LineChart data={chartData}>
+                <Line type="monotone" dataKey="count" stroke="#8884d8" />
+                <CartesianGrid stroke="#ccc" />
+                <XAxis dataKey="status" />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+              </LineChart>
+            ) : (
+              <BarChart data={chartData}>
+                <Bar dataKey="count" fill="#8884d8" />
+                <CartesianGrid stroke="#ccc" />
+                <XAxis dataKey="status" />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+              </BarChart>
+            )}
           </ResponsiveContainer>
         </div>
       </Card>

@@ -8,7 +8,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import useSWR from "swr";
 import { fetcher } from "../utils/fetcher";
 import { useToast } from "../ui/use-toast";
@@ -39,13 +45,17 @@ export function UpdateDonHang({ idDonHang }: IDDonHang) {
     };
     console.log(updatedData);
 
-    const response = await fetch(`http://localhost:8080/api/thanh-toan/don-hang/${idDonHang}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedData),
-    });
+    const response = await fetch(
+      `http://localhost:8080/api/thanh-toan/don-hang/${idDonHang}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "",
+        },
+        body: JSON.stringify(updatedData),
+      }
+    );
 
     if (response.ok) {
       toast({

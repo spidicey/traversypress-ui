@@ -21,12 +21,16 @@ export const columns: ColumnDef<PhieuHen>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="ID" />
     ),
+    filterFn: "includesString",
+
   },
   {
     accessorKey: "ngayHen",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Ngày Hẹn" />
     ),
+    filterFn: "includesString",
+
   },
   {
     accessorKey: "khachHang",

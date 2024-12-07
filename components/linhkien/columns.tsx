@@ -13,51 +13,74 @@ import {
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
 import Image from "next/image";
+import { UpdateLinhKien } from "./updateLinhKien";
 export const columns: ColumnDef<LinhKien>[] = [
   {
     accessorKey: "danhSachAnh",
+    id:"Ảnh",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Ảnh" />
     ),
-    cell: (info) =>{
-      const linhKien = info.getValue() as Anh[]
+    cell: (info) => {
+      const linhKien = info.getValue() as Anh[];
       if (linhKien.length !== 0) {
-      return <Image src={linhKien[0].url} alt="ảnh" width={100} height={100} />
-
+        return (
+          <Image src={linhKien[0].url} alt="ảnh" width={100} height={100} />
+        );
       }
-    }
+    },
   },
   {
     accessorKey: "idSanPham",
-
+    id:"ID Linh Kiện",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="ID Linh Kiện" />
     ),
+    filterFn: "includesString",
+
   },
   {
+    id:"Tên Linh Kiện",
     accessorKey: "tenSanPham",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Tên Linh Kiện" />
     ),
+    filterFn: "includesString",
+
   },
   {
+    id:"Nhãn hiệu",
     accessorKey: "nhanHieu",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Nhãn hiệu" />
     ),
+    filterFn: "includesString",
+
   },
 
   {
+    id:"Giá",
     accessorKey: "gia",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Giá" />
     ),
+    filterFn: "includesString",
+
   },
   {
+    id:"Thời gian bảo hành",
     accessorKey: "thoiGianBaoHanh",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Thời gian bảo hành" />
     ),
+    filterFn: "includesString",
+  },
+  {
+    id : "edit",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="View" />
+    ),
+    cell: (info) => <UpdateLinhKien idLinhKien={info.row.original.idSanPham} />,
   },
   {
     id: "actions",
@@ -75,14 +98,9 @@ export const columns: ColumnDef<LinhKien>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(linhKien.nhanHieu)}
             >
-              Copy ID
+              <Button variant="destructive">Xoá</Button>
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View details</DropdownMenuItem>
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
