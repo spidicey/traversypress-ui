@@ -55,7 +55,7 @@ export function AddPhieuXuat() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "authorization":"",
+        authorization: "",
       },
       body: JSON.stringify(createData),
     });

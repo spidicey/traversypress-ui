@@ -5,17 +5,17 @@ import { fetcher } from "@/components/utils/fetcher";
 import { DataTable } from "@/components/data-table/data-table";
 
 interface PostsTableProps {
-  id?:number;
+  id?: number;
   limit?: number;
   title?: string;
 }
 
-const CTPhieuSuaTable = ({id, limit, title }: PostsTableProps) => {
+const CTPhieuSuaTable = ({ id, limit, title }: PostsTableProps) => {
   const { data, isLoading, error } = useSWR<ResponseData<CTPhieuSua[]>>(
     `http://localhost:8080/api/phieusua/details/phieusua/${id}`,
     fetcher
   );
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div>Đang tải...</div>;
   console.log(data?.data);
   return (
     <div className="mt-10">

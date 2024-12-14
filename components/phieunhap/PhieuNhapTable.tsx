@@ -26,7 +26,7 @@ const PhieuNhapTable = ({ limit, title }: PostsTableProps) => {
     `http://localhost:8080/api/kho/phieunhap`,
     fetcher
   );
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div>Đang tải...</div>;
 
   return (
     <div className="mt-10">

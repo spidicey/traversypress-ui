@@ -66,6 +66,12 @@ export const columns: ColumnDef<PhieuHen>[] = [
   {
     accessorKey: "category.loai",
     header: "Loại",
+    filterFn: "includesString",
+  },
+  {
+    accessorKey: "maPhieuBaoHanh",
+    header: "Phiếu bảo hành",
+    filterFn: "includesString",
   },
   // {
   //   id: "actions",

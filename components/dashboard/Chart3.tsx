@@ -32,34 +32,37 @@ import { Label } from "@/components/ui/label";
 import { BarChartIcon, LineChartIcon } from "lucide-react";
 import { DateRangePicker } from "../ui/date-range-picker";
 
-interface PhieuHen {
-  idPhieuHen: number;
-  ngayHen: string;
+interface PhieuSua {
+  idPhieuSua: number;
   khachHang: {
     tenKhachHang: string;
   };
-  trangThai: string;
-  category: {
-    idLoai: number;
-    loai: string;
+  tenSanPham: string;
+  moTa: string;
+  loaiSuaChua: string;
+  baoGia: number;
+  ngayTao: string;
+  nhanVien: {
+    idNhanVien: number;
+    hoTen: string;
   };
+  giaLinhKien: number;
 }
 
 interface ResponseData {
   status: number;
   message: string;
-  data: PhieuHen[];
+  data: PhieuSua[];
 }
 
 interface ChartData {
-  category: string;
-  "Hoàn thành": number;
-  "Đang chờ": number;
+  nhanVien: string;
+  soLuongPhieu: number;
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const PhieuHenChart = ({
+const PhieuSuaNhanVienChart = ({
   data,
   dateRange,
   chartType,
@@ -71,59 +74,47 @@ const PhieuHenChart = ({
   const filteredData = useMemo(() => {
     if (!dateRange?.from || !dateRange?.to) return data.data;
 
-    return data.data.filter((phieuHen) => {
-      const date = new Date(phieuHen.ngayHen);
+    return data.data.filter((phieuSua) => {
+      const date = new Date(phieuSua.ngayTao);
       // @ts-ignore
       return date >= dateRange.from && date <= dateRange.to;
     });
   }, [data, dateRange]);
 
   const chartData = useMemo(() => {
-    const categoryMap = new Map<
-      string,
-      { "Hoàn thành": number; "Đang chờ": number }
+    const nhanVienMap = new Map<
+      number,
+      { hoTen: string; soLuongPhieu: number }
     >();
 
-    filteredData.forEach((phieuHen) => {
-      const category = phieuHen.category.loai;
-      const status = phieuHen.trangThai;
-
-      if (!categoryMap.has(category)) {
-        categoryMap.set(category, { "Hoàn thành": 0, "Đang chờ": 0 });
+    filteredData.forEach((phieuSua) => {
+      const { idNhanVien, hoTen } = phieuSua.nhanVien;
+      if (!nhanVienMap.has(idNhanVien)) {
+        nhanVienMap.set(idNhanVien, { hoTen, soLuongPhieu: 0 });
       }
-
-      const categoryData = categoryMap.get(category)!;
-      categoryData[status as keyof typeof categoryData]++;
+      nhanVienMap.get(idNhanVien)!.soLuongPhieu++;
     });
 
-    return Array.from(categoryMap).map(([category, counts]) => ({
-      category,
-      "Hoàn thành": counts["Hoàn thành"],
-      "Đang chờ": counts["Đang chờ"],
+    return Array.from(nhanVienMap.values()).map(({ hoTen, soLuongPhieu }) => ({
+      nhanVien: hoTen,
+      soLuongPhieu,
     }));
   }, [filteredData]);
-
-  const ChartComponent = chartType === "bar" ? BarChart : LineChart;
-  const DataComponent = chartType === "bar" ? Bar : Line;
 
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Phân bố phiếu hẹn theo trạng thái</CardTitle>
+        <CardTitle>Phân Bố Phiếu Sửa Chữa Theo Nhân Viên</CardTitle>
         <CardDescription>
-          Số phiếu hẹn theo trạng thái trong khoáng thời gian.
+          Số lượng phiếu sửa chữa được xử lý bởi mỗi nhân viên
         </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer
           config={{
-            "Hoàn thành": {
-              label: "Completed",
-              color: "hsl(217, 91%, 60%)", // Darker blue
-            },
-            "Đang chờ": {
-              label: "Pending",
-              color: "hsl(217, 91%, 80%)", // Lighter blue
+            soLuongPhieu: {
+              label: "Số Lượng Phiếu",
+              color: "hsl(217, 91%, 60%)",
             },
           }}
           className="h-[400px]"
@@ -131,38 +122,27 @@ const PhieuHenChart = ({
           <ResponsiveContainer width="100%" height="100%">
             {chartType === "bar" ? (
               <BarChart data={chartData}>
-                <XAxis dataKey="category" />
+                <XAxis dataKey="nhanVien" />
                 <YAxis />
                 <ChartTooltip content={<ChartTooltipContent />} />
                 <Legend />
                 <Bar
-                  dataKey="Hoàn thành"
+                  dataKey="soLuongPhieu"
                   fill="hsl(217, 91%, 60%)"
-                  name="Completed"
-                />
-                <Bar
-                  dataKey="Đang chờ"
-                  fill="hsl(217, 91%, 80%)"
-                  name="Pending"
+                  name="Số Lượng Phiếu"
                 />
               </BarChart>
             ) : (
               <LineChart data={chartData}>
-                <XAxis dataKey="category" />
+                <XAxis dataKey="nhanVien" />
                 <YAxis />
                 <ChartTooltip content={<ChartTooltipContent />} />
                 <Legend />
                 <Line
                   type="monotone"
-                  dataKey="Hoàn thành"
+                  dataKey="soLuongPhieu"
                   stroke="hsl(217, 91%, 60%)"
-                  name="Completed"
-                />
-                <Line
-                  type="monotone"
-                  dataKey="Đang chờ"
-                  stroke="hsl(217, 91%, 80%)"
-                  name="Pending"
+                  name="Số Lượng Phiếu"
                 />
               </LineChart>
             )}
@@ -173,9 +153,9 @@ const PhieuHenChart = ({
   );
 };
 
-export default function CustomChart() {
+export default function BieuDoPhieuSua() {
   const { data, error, isLoading } = useSWR<ResponseData>(
-    "http://localhost:8080/api/phieuhen",
+    "http://localhost:8080/api/phieusua",
     fetcher
   );
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
@@ -187,7 +167,7 @@ export default function CustomChart() {
   if (error)
     return (
       <div className="text-center text-red-500 text-xl mt-8">
-        Failed to load data
+        Không thể tải dữ liệu
       </div>
     );
   if (isLoading)
@@ -196,7 +176,7 @@ export default function CustomChart() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-8 text-center">
-        Phieu Hen Dashboard
+        Bảng Điều Khiển Phiếu Sửa Chữa Theo Nhân Viên
       </h1>
       <div className="mb-6 flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
         <DateRangePicker dateRange={dateRange} setDateRange={setDateRange} />
@@ -214,48 +194,17 @@ export default function CustomChart() {
             ) : (
               <LineChartIcon className="h-4 w-4" />
             )}
-            <span>{chartType === "bar" ? "Bar Chart" : "Line Chart"}</span>
+            <span>{chartType === "bar" ? "Biểu Đồ Cột" : "Biểu Đồ Đường"}</span>
           </Label>
         </div>
       </div>
       {data && (
-        <PhieuHenChart
+        <PhieuSuaNhanVienChart
           data={data}
           dateRange={dateRange}
           chartType={chartType}
         />
       )}
-      <h2 className="text-2xl font-semibold mt-12 mb-6">Danh sách phiếu hẹn</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {data?.data
-          .filter((phieuHen) => {
-            if (!dateRange?.from || !dateRange?.to) return true;
-            const date = new Date(phieuHen.ngayHen);
-            return date >= dateRange.from && date <= dateRange.to;
-          })
-          .map((phieuHen) => (
-            <Card key={phieuHen.idPhieuHen}>
-              <CardHeader>
-                <CardTitle>Phiếu hẹn #{phieuHen.idPhieuHen}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p>
-                  <strong>Ngày:</strong>{" "}
-                  {new Date(phieuHen.ngayHen).toLocaleDateString()}
-                </p>
-                <p>
-                  <strong>Trạng thái:</strong> {phieuHen.trangThai}
-                </p>
-                <p>
-                  <strong>Loại:</strong> {phieuHen.category.loai}
-                </p>
-                <p>
-                  <strong>Khách hàng:</strong> {phieuHen.khachHang.tenKhachHang}
-                </p>
-              </CardContent>
-            </Card>
-          ))}
-      </div>
     </div>
   );
 }

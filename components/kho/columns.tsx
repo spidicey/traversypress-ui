@@ -28,6 +28,7 @@ export const columns: ColumnDef<Kho>[] = [
   },
   {
     id:"nhãn hiệu",
+    accessorKey: "linhKien",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Nhãn Hiệu" />
     ),

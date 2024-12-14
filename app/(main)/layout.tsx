@@ -26,7 +26,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const decodedToken = jwtDecode(token || "");
   // @ts-ignore
   const role = decodedToken.role;
-
+  console.log(process.env.NEXT_PUBLIC_API_BASE_URL);
   return (
     <>
       <Navbar />

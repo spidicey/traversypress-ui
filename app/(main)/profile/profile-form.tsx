@@ -11,15 +11,14 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { ToastAction } from "@/components/ui/toast";
-import { toast } from "@/components/ui/use-toast";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
+import { toast } from "@/components/ui/use-toast";
 
 const profileFormSchema = z.object({
   hoTen: z.string(),
@@ -31,51 +30,72 @@ const profileFormSchema = z.object({
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 export function ProfileForm() {
-  const token = Cookies.get("token");
-  const decodedToken = token ? jwtDecode(token) : null;
-    // @ts-ignore
-  const username = decodedToken.username
-  
+  const [username, setUsername] = useState<string | null>(null);
   const [nhanVienData, setNhanVienData] = useState<ResponseData<NhanVien>>();
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/auth/nhanvien/username/${username}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setNhanVienData(data);
-        form.setValue("hoTen", data.hoTen);
-        form.setValue("sdt", data.sdt);
-        form.setValue("diaChi", data.diaChi);
-        form.setValue("chucVu", data.chucVu);
-        console.log(data);
-      });
-  }, [username]);
+    const token = Cookies.get("token");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode<{ username: string }>(token);
+        setUsername(decodedToken.username);
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+    }
+  }, []);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      hoTen: nhanVienData?.data?.hoTen || "",
-      sdt: nhanVienData?.data?.sdt || "",
-      diaChi: nhanVienData?.data?.diaChi || "",
-      chucVu: nhanVienData?.data?.chucVu || "",
+      hoTen: "",
+      sdt: "",
+      diaChi: "",
+      chucVu: "",
     },
     mode: "onChange",
   });
 
+  useEffect(() => {
+    if (!username) return;
+
+    fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/nhanvien/username/${username}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setNhanVienData(data);
+        form.setValue("hoTen", data?.data?.hoTen || "");
+        form.setValue("sdt", data?.data?.sdt || "");
+        form.setValue("diaChi", data?.data?.diaChi || "");
+        form.setValue("chucVu", data?.data?.chucVu || "");
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, [username, form]);
+
   async function onSubmit(data: ProfileFormValues) {
+    if (!nhanVienData) return;
+
+    const token = Cookies.get("token");
     const updatedData = {
       ...data,
-       idNhanVien: nhanVienData?.data.idNhanVien || "",
+      idNhanVien: nhanVienData.data.idNhanVien,
     };
-    console.log(updatedData);
-    const response = await fetch(`http://localhost:8080/api/auth/nhanvien`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(updatedData),
-    });
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/nhanvien`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: ``,
+        },
+        body: JSON.stringify(updatedData),
+      }
+    );
+
     if (response.ok) {
       toast({
         title: "Cập nhật thành công",
@@ -91,10 +111,13 @@ export function ProfileForm() {
     }
   }
 
+  if (!username) {
+    return <div>Đang tải...</div>;
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-
         <FormField
           control={form.control}
           name="hoTen"

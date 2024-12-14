@@ -7,4 +7,5 @@ type PhieuSua = {
   loaiSuaChua: string;
   baoGia: number;
   ngayTao: Date;
+  giaLinhKien: number;
 };

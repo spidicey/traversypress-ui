@@ -18,7 +18,7 @@ const NhanVienTable = ({ title }: PostsTableProps) => {
     `http://localhost:8080/api/auth/nhanvien`,
     fetcher
   );
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div>Đang tải...</div>;
   console.log(data?.data.at(0)?.taiKhoan.tk);
   return (
     <div className="mt-10">

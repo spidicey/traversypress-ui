@@ -76,16 +76,12 @@ const PhieuHenTable = ({ title }: PostsTableProps) => {
     urlPhieuHen,
     fetcher
   );
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div>Đang tải...</div>;
   console.log(data?.data);
   return (
     <div className="mt-10">
       <h3 className="text-2xl mb-4 font-semibold">{title ? title : "Posts"}</h3>
-      <DataTable
-        columns={columns}
-        data={data?.data ?? []}
-        filterFields={filterFields}
-      />
+      <DataTable columns={columns} data={data?.data ?? []} />
     </div>
   );
 };

@@ -33,7 +33,7 @@ export function UpdateDonHang({ idDonHang }: IDDonHang) {
     fetcher
   );
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div>Đang tải...</div>;
   if (error || !data || data.status !== 200)
     return <div>Error loading order details.</div>;
 

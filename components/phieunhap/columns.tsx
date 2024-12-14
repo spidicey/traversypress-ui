@@ -9,18 +9,21 @@ export const columns: ColumnDef<PhieuNhap>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="ID" />
     ),
+    filterFn: "includesString",
   },
   {
     accessorKey: "ngayNhap",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Ngày Nhập" />
     ),
+    filterFn: "includesString",
   },
   {
     accessorKey: "nhaCungCap",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Nhà cung cấp" />
     ),
+    filterFn: "includesString",
   },
   {
     accessorKey: "nhanVien",
@@ -39,6 +42,7 @@ export const columns: ColumnDef<PhieuNhap>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Số lượng" />
     ),
+    filterFn: "includesString",
   },
   {
     accessorKey: "linhKien",
@@ -60,6 +64,7 @@ export const columns: ColumnDef<PhieuNhap>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="View" />
     ),
+
     cell: (info) => (
       <UpdatePhieuXuat idPhieuXuat={info.row.original.idPhieuNhap} />
     ),

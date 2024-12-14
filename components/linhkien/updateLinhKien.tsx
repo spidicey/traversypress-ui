@@ -65,7 +65,7 @@ export function UpdateLinhKien({ idLinhKien }: IDLinhKien) {
     fetcher
   );
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div>Đang tải...</div>;
 
   const onSubmit = async (formData: LinhKienFormData) => {
     const updatedData = {
@@ -113,7 +113,7 @@ export function UpdateLinhKien({ idLinhKien }: IDLinhKien) {
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-2 text-sm">
+          <div className="space-y-2 text-sm">
             <Image
               // loader={imageLoader}
               src={preview}

@@ -15,7 +15,7 @@ const KhachHangTable = ({ title }: PostsTableProps) => {
     `http://localhost:8080/api/auth/khachhang`,
     fetcher
   );
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div>Đang tải...</div>;
   return (
     <div className="mt-10">
       <h3 className="text-2xl mb-4 font-semibold">{title ? title : "Posts"}</h3>

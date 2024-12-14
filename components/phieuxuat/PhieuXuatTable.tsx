@@ -33,7 +33,7 @@ const PhieuXuatTable = ({ limit, title }: PostsTableProps) => {
     `http://localhost:8080/api/kho/phieuxuat`,
     fetcher
   );
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div>Đang tải...</div>;
   console.log(data?.data);
   const sortedPosts: Post[] = [...posts].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()

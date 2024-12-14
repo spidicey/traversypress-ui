@@ -45,7 +45,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       );
 
       const signInResult = await signInResponse.json();
-      if(signInResult.role==="Khách hàng"){
+      if (signInResult.role === "Khách hàng") {
         toast({
           title: "Tài khoản không đủ quyền",
           description: "Vui lòng kiểm tra lại tài khoản của bạn.",
@@ -121,7 +121,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              disabled={isLoading }
+              disabled={isLoading}
               {...register("password")}
             />
             {errors?.password && (
